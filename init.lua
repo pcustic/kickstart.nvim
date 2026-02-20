@@ -102,7 +102,7 @@ vim.g.have_nerd_font = false
 vim.o.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
--- vim.o.relativenumber = true
+vim.o.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
@@ -481,6 +481,9 @@ require('lazy').setup({
       -- Mason must be loaded before its dependents so we need to set it up here.
       -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
       { 'mason-org/mason.nvim', opts = {} },
+
+      -- This plugin streamlines Neovim's LSP setup by automating server installation and activation, providing helpful management commands, and mapping mason.nvim packages to nvim-lspconfig configurations.
+      { 'mason-org/mason-lspconfig.nvim', opts = {} },
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
@@ -911,3 +914,8 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+-- This sets the line number color
+vim.api.nvim_set_hl(0, 'LineNr', { fg = '#c0caf5' })
+vim.api.nvim_set_hl(0, 'LineNrAbove', { fg = '#c0caf5' })
+vim.api.nvim_set_hl(0, 'LineNrBelow', { fg = '#c0caf5' })
