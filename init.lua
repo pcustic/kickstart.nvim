@@ -601,6 +601,20 @@ require('lazy').setup({
       --  See `:help lsp-config` for information about keys and how to configure
       local servers = {
         ty = {},
+        ruff = {
+          init_options = {
+            settings = {
+              lint = {
+                enable = false, -- formatter only
+              },
+              -- optional: avoid even syntax diagnostics from Ruff
+              showSyntaxErrors = false,
+
+              -- optional: let project pyproject.toml / ruff.toml win
+              configurationPreference = 'filesystemFirst',
+            },
+          },
+        },
         -- clangd = {},
         -- gopls = {},
         -- pyright = {},
@@ -844,8 +858,37 @@ require('lazy').setup({
       --  and try some other statusline plugin
       local statusline = require 'mini.statusline'
       -- set use_icons to true if you have a Nerd Font
-      statusline.setup { use_icons = vim.g.have_nerd_font }
+      statusline.setup {
+        use_icons = vim.g.have_nerd_font,
+        content = {
+          active = function()
+            local mode, mode_hl = statusline.section_mode { trunc_width = 120 }
 
+            return statusline.combine_groups {
+              { hl = mode_hl, strings = { mode } },
+              {
+                hl = 'MiniStatuslineDevinfo',
+                strings = {
+                  statusline.section_git { trunc_width = 140 },
+                  statusline.section_diff { trunc_width = 120 },
+                  statusline.section_lsp { trunc_width = 120 },
+                },
+              },
+              '%<',
+              { hl = 'MiniStatuslineFilename', strings = { statusline.section_filename { trunc_width = 80 } } },
+              '%=',
+              { hl = 'MiniStatuslineFileinfo', strings = { vim.bo.filetype } },
+              {
+                hl = mode_hl,
+                strings = {
+                  statusline.section_searchcount { trunc_width = 75 },
+                  statusline.section_location { trunc_width = 75 },
+                },
+              },
+            }
+          end,
+        },
+      }
       -- You can configure sections in the statusline by overriding their
       -- default behavior. For example, here we set the section for
       -- cursor location to LINE:COLUMN
